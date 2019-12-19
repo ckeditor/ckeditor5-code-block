@@ -28,12 +28,17 @@ function getEditor( initialData = '' ) {
 describe( 'Markdown', () => {
 	it( 'should be loaded and returned from the editor', () => {
 		const markdown =
-			'```plaintext\n' +
+			'```\n' +
 			'test()\n' +
 			'```';
 
 		return getEditor( markdown ).then( editor => {
-			expect( editor.getData() ).to.equal( markdown );
+			// This is to account to the new behavior of the markdown plugin after its code revamp.
+			// This cleanup could be removed later on, once the revamp is merged.
+			let data = editor.getData();
+			data = data.replace( 'plaintext', '' );
+
+			expect( data ).to.equal( markdown );
 		} );
 	} );
 } );
