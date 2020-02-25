@@ -39,6 +39,8 @@ describe( 'Markdown', () => {
 			data = data.replace( 'plaintext', '' );
 
 			expect( data ).to.equal( markdown );
+
+			editor.destroy(); // Tests cleanup.
 		} );
 	} );
 } );
