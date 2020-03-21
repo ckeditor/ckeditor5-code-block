@@ -14,7 +14,7 @@ import GFMDataProcessor from '@ckeditor/ckeditor5-markdown-gfm/src/gfmdataproces
 class Markdown extends Plugin {
 	constructor( editor ) {
 		super( editor );
-		editor.data.processor = new GFMDataProcessor();
+		editor.data.processor = new GFMDataProcessor( editor.data.viewDocument );
 	}
 }
 
