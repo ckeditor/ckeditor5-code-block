@@ -7,6 +7,7 @@
  * @module code-block/converters
  */
 
+import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
 import {
 	rawSnippetTextToModelDocumentFragment,
 	getPropertyAssociation
@@ -126,12 +127,11 @@ export function modelToDataViewSoftBreakInsertion( model ) {
  *
  *		<codeBlock language="javascript">foo();<softBreak></softBreak>bar();</codeBlock>
  *
- * @param {module:engine/controller/datacontroller~DataController} dataController
  * @param {Array.<module:code-block/codeblock~CodeBlockLanguageDefinition>} languageDefs The normalized language
  * configuration passed to the feature.
  * @returns {Function} Returns a conversion callback.
  */
-export function dataViewToModelCodeBlockInsertion( dataController, languageDefs ) {
+export function dataViewToModelCodeBlockInsertion( languageDefs ) {
 	// Language names associated with CSS classes:
 	//
 	//		{
@@ -142,6 +142,8 @@ export function dataViewToModelCodeBlockInsertion( dataController, languageDefs 
 	//		}
 	const classesToLanguages = getPropertyAssociation( languageDefs, 'class', 'language' );
 	const defaultLanguageName = languageDefs[ 0 ].language;
+
+	const htmlDataProcessor = new HtmlDataProcessor();
 
 	return ( evt, data, conversionApi ) => {
 		const viewItem = data.viewItem;
@@ -183,7 +185,7 @@ export function dataViewToModelCodeBlockInsertion( dataController, languageDefs 
 			writer.setAttribute( 'language', defaultLanguageName, codeBlock );
 		}
 
-		const stringifiedElement = dataController.processor.toData( viewChild );
+		const stringifiedElement = htmlDataProcessor.toData( viewChild );
 		const textData = extractDataFromCodeElement( stringifiedElement );
 		const fragment = rawSnippetTextToModelDocumentFragment( writer, textData );
 
